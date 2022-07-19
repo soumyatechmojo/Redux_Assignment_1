@@ -1,13 +1,40 @@
 import './App.css';
-import Counter from './Components/Counter';
-import { CounterContextProvider } from './Context/index';
+import axios from "axios"
+import { useState, useEffect } from 'react';
 
-function App() {
+
+
+const App = () => {
+  const [data, setData] = useState([]);
+  const fetchData = async () => {
+    const { data } = await axios.get(
+      "https://jsonplaceholder.typicode.com/users"
+    );
+    setData(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <CounterContextProvider>
-      <Counter/>
-    </CounterContextProvider>
+    <div>
+      <ui>
+        {data.map((item) => {
+          return (
+            <>
+              <li>Id: {item.id}</li>
+              <li>Name: {item.name}</li>
+              <li>Email: {item.email}</li>
+              <li>Phone: {item.phone}</li>
+              <li>Address: {item.address.street}</li>
+              <hr />
+            </>
+          );
+        })}
+      </ui>
+    </div>
   );
-}
+};
 
 export default App;
